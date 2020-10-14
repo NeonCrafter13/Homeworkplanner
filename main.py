@@ -12,12 +12,59 @@ from PyQt5.QtWidgets import (
     QLabel,
     QListWidget,
     QListWidgetItem,
-    QAbstractItemView
+    QAbstractItemView,
+    QLineEdit,
+    QDateEdit,
+    QCheckBox
 )
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDateTime
+
+from task import Task
 
 app = QApplication(sys.argv)
+
+class NewTaskWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initMe()
+
+    def initMe(self):
+        self.h = QHBoxLayout(self)
+
+        self.subject = QLineEdit("Subject:")
+        self.h.addWidget(self.subject)
+
+        self.what = QLineEdit("What:")
+        self.h.addWidget(self.what)
+
+        self.deadline = QDateEdit(calendarPopup=True)
+        self.h.addWidget(self.deadline)
+        self.deadline.setDateTime(QDateTime.currentDateTime())
+
+        self.info = QLabel("Mark as important:")
+        self.h.addWidget(self.info)
+
+        self.important = QCheckBox()
+        self.h.addWidget(self.important)
+
+        self.submitbutton = QPushButton("Submit")
+        self.submitbutton.clicked.connect(self.submit)
+        self.h.addWidget(self.submitbutton)
+
+
+        self.setLayout(self.h)
+
+    def submit(self):
+        # Creates new Task 
+        subject = self.subject.text
+        what = self.what.text
+        deadline = self.deadline.date()
+        important = self.important.isChecked()
+        newtask = Task(subject, what, deadline, important)
+
+        # Todo: Add Task to QListWidget, save task
+
 
 class TasksWidget(QWidget):
     def __init__(self):
@@ -27,7 +74,6 @@ class TasksWidget(QWidget):
     def initMe(self):
         self.h = QHBoxLayout(self)
         self.scroll = QScrollArea()
-        # self.h.addWidget(scroll)
         self.scroll.setWidgetResizable(True)
         self.scrollcontent = QListWidget(self.scroll)
 
@@ -38,7 +84,6 @@ class TasksWidget(QWidget):
         self.scroll.setWidget(self.scrollcontent)
         self.h.addWidget(self.scroll)
         self.setLayout(self.h)
-        # self.scroll.show()
 
 class MainWidget(QWidget):
     def __init__(self):
@@ -47,7 +92,9 @@ class MainWidget(QWidget):
 
     def initMe(self):
         self.v = QVBoxLayout(self)
-        self.v.addWidget(QLabel("NEW"))
+        self.v.addWidget(QLabel("Create new Task:"))
+        self.v.addWidget(NewTaskWidget())
+        self.v.addWidget(QLabel("Tasks:"))
         self.v.addWidget(TasksWidget())
         self.setLayout(self.v)
 
