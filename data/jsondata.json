@@ -1,21 +1,11 @@
 [
     {
-        "subject": "Tetd",
-        "homework": "TEst",
+        "subject": "Maths",
+        "homework": "Book p. 205 nr. 6",
         "due_date": [
             2020,
             10,
             16
-        ],
-        "important": true
-    },
-    {
-        "subject": "MAths",
-        "homework": "Book p. 290, nr.3",
-        "due_date": [
-            2020,
-            10,
-            12
         ],
         "important": true
     }

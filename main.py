@@ -18,12 +18,36 @@ from PyQt5.QtWidgets import (
     QCheckBox
 )
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QDateTime
+from PyQt5.QtCore import Qt, QDateTime, QObject, pyqtSignal
 
 from task import Task
 import data
 
 app = QApplication(sys.argv)
+
+class RefreshTasksEvent(QObject):
+    refresh = pyqtSignal()
+
+global refreshtasksevent
+refreshtasksevent = RefreshTasksEvent()
+
+class TaskView(QWidget):
+    def __init__(self, task: Task):
+        super().__init__()
+        self.task = task
+        self.initMe()
+        
+    
+    def initMe(self):
+        self.h = QHBoxLayout(self)
+        
+        self.h.addWidget(QLabel(self.task.subject))
+
+        self.h.addWidget(QLabel(self.task.what))
+
+        self.h.addWidget(QLabel(self.task.due_date.toString()))
+
+        self.setLayout(self.h)
 
 class NewTaskWidget(QWidget):
     def __init__(self):
@@ -67,27 +91,52 @@ class NewTaskWidget(QWidget):
         #Add to Json
         data.add_data(newtask)
 
-        # Todo: Add Task to QListWidget
+        global refreshtasksevent
+        refreshtasksevent.refresh.emit()
 
 
 class TasksWidget(QWidget):
     def __init__(self):
         super().__init__()
+
+        global refreshtasksevent
+        refreshtasksevent.refresh.connect(self.reloadTasks)
+
         self.initMe()
 
     def initMe(self):
         self.h = QHBoxLayout(self)
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
-        self.scrollcontent = QListWidget(self.scroll)
+        self.scrollcontent = QListWidget()
 
-        for i in range(20):
-            a = QListWidgetItem(str(i))
-            self.scrollcontent.addItem(a)
+        for task in data.view_data():
+            itemN = QListWidgetItem()
+
+            itemN = QListWidgetItem()
+            widget = TaskView(task)
+            itemN.setSizeHint(widget.sizeHint())
+
+            self.scrollcontent.addItem(itemN)
+            self.scrollcontent.setItemWidget(itemN, widget)
 
         self.scroll.setWidget(self.scrollcontent)
         self.h.addWidget(self.scroll)
         self.setLayout(self.h)
+
+    def reloadTasks(self):
+
+        self.scrollcontent.clear()
+        for task in data.view_data():
+            itemN = QListWidgetItem()
+
+            itemN = QListWidgetItem()
+            widget = TaskView(task)
+            itemN.setSizeHint(widget.sizeHint())
+
+            self.scrollcontent.addItem(itemN)
+            self.scrollcontent.setItemWidget(itemN, widget)
+
 
 class MainWidget(QWidget):
     def __init__(self):
