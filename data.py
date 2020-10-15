@@ -5,6 +5,8 @@
 # probably Json, sqlite
 #-------------------------------------------------------------------------------------
 import json
+from task import Task
+from PyQt5.QtCore import QDate #Class of the Dates
 
 filename = "./data/jsondata.json"
 def Choices():
@@ -16,27 +18,34 @@ def Choices():
 def view_data():
 	with open (filename, "r") as f:
 		temp = json.load(f)
+		tasks = [] #Lists of Task.task
 		for entry in temp:
-			name = entry["name"]
+			subject = entry["subject"]
 			homework = entry["homework"]
-			due_date = entry["due_date"]
-			print(f"Name: {name}")
-			print(f"Homework: {homework}")
-			print(f"Due Date: {due_date}")
-			print("\n\n")
+			due_date = entry["due_date"] #List of 3 int for year, month, day
+			due_date = QDate(*due_date)
+			important = entry["important"]
+			tasks.append(Task(subject, homework, due_date, important=important))
+		return tasks
+			
 
-def add_data():
+def add_data(task: Task):
+	subject = task.subject
+	homework = task.what
+	due_date = task.due_date
+	important = task.important
 	item_data = {}
 	with open (filename, "r") as f:
 		temp = json.load(f)
-	item_data["name"] = input("Your Name: ")
-	item_data["homework"] = input("What Homework Do You Have: ")
-	item_data["due_date"] = input("When Is The Homework Due: ")
+	item_data["subject"] = subject
+	item_data["homework"] = homework
+	item_data["due_date"] = [*due_date.getDate()]
+	item_data["important"] = important
 	temp.append(item_data)
 	with open (filename, 'w') as f:
 		json.dump(temp, f, indent=4)
 
-
+"""
 while True:
 	Choices()
 	choice = input("\nEnter Number: ") 
@@ -48,4 +57,4 @@ while True:
 		break
 	else:
 		print("You did not select a number, please read more carefully")
-
+"""

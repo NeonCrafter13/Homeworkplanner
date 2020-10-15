@@ -21,6 +21,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDateTime
 
 from task import Task
+import data
 
 app = QApplication(sys.argv)
 
@@ -38,9 +39,9 @@ class NewTaskWidget(QWidget):
         self.what = QLineEdit("What:")
         self.h.addWidget(self.what)
 
-        self.deadline = QDateEdit(calendarPopup=True)
-        self.h.addWidget(self.deadline)
-        self.deadline.setDateTime(QDateTime.currentDateTime())
+        self.due_date = QDateEdit(calendarPopup=True)
+        self.h.addWidget(self.due_date)
+        self.due_date.setDateTime(QDateTime.currentDateTime())
 
         self.info = QLabel("Mark as important:")
         self.h.addWidget(self.info)
@@ -57,13 +58,16 @@ class NewTaskWidget(QWidget):
 
     def submit(self):
         # Creates new Task 
-        subject = self.subject.text
-        what = self.what.text
-        deadline = self.deadline.date()
+        subject = self.subject.text()
+        what = self.what.text()
+        due_date = self.due_date.date()
         important = self.important.isChecked()
-        newtask = Task(subject, what, deadline, important)
+        newtask = Task(subject, what, due_date, important)
 
-        # Todo: Add Task to QListWidget, save task
+        #Add to Json
+        data.add_data(newtask)
+
+        # Todo: Add Task to QListWidget
 
 
 class TasksWidget(QWidget):
