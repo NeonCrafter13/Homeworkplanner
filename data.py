@@ -61,7 +61,7 @@ def delete_data():
 			new_data.append(entry)
 			i=i+1
 	with open (filename, 'w') as f:
-		json.dump(temp, f, indent=4)
+		json.dump(new_data, f, indent=4)
 
 def edit_data():
 	view_data()
@@ -84,7 +84,7 @@ def edit_data():
 	with open (filename, 'w') as f:
 		json.dump(temp, f, indent=4)
 		
-
+delete_data()
 """
 while True:
 	Choices()
