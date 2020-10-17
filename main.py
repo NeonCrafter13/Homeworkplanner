@@ -25,6 +25,10 @@ import data
 
 app = QApplication(sys.argv)
 
+
+editIcon = QIcon("data/edit.png")
+deleteIcon = QIcon("data/delete.png")
+
 class RefreshTasksEvent(QObject):
     refresh = pyqtSignal()
 
@@ -32,9 +36,10 @@ global refreshtasksevent
 refreshtasksevent = RefreshTasksEvent()
 
 class TaskView(QWidget):
-    def __init__(self, task: Task):
+    def __init__(self, task: Task, index: int):
         super().__init__()
         self.task = task
+        self.index = index
         self.initMe()
         
     
@@ -47,7 +52,19 @@ class TaskView(QWidget):
 
         self.h.addWidget(QLabel(self.task.due_date.toString()))
 
+        self.edit = QPushButton(icon=editIcon)
+        self.h.addWidget(self.edit)
+
+        self.deleteBtn = QPushButton(icon=deleteIcon)
+        self.deleteBtn.clicked.connect(self.delete)
+        self.h.addWidget(self.deleteBtn)
+
         self.setLayout(self.h)
+
+    def delete(self):
+        print(self.index)
+        data.delete_data(self.index)
+        refreshtasksevent.refresh.emit()
 
 class NewTaskWidget(QWidget):
     def __init__(self):
@@ -110,15 +127,18 @@ class TasksWidget(QWidget):
         self.scroll.setWidgetResizable(True)
         self.scrollcontent = QListWidget()
 
+        i = 0
         for task in data.view_data():
             itemN = QListWidgetItem()
 
             itemN = QListWidgetItem()
-            widget = TaskView(task)
+            widget = TaskView(task, i)
             itemN.setSizeHint(widget.sizeHint())
 
             self.scrollcontent.addItem(itemN)
             self.scrollcontent.setItemWidget(itemN, widget)
+
+            i += 1
 
         self.scroll.setWidget(self.scrollcontent)
         self.h.addWidget(self.scroll)
@@ -127,15 +147,17 @@ class TasksWidget(QWidget):
     def reloadTasks(self):
 
         self.scrollcontent.clear()
+        i = 0
         for task in data.view_data():
             itemN = QListWidgetItem()
 
             itemN = QListWidgetItem()
-            widget = TaskView(task)
+            widget = TaskView(task, i)
             itemN.setSizeHint(widget.sizeHint())
 
             self.scrollcontent.addItem(itemN)
             self.scrollcontent.setItemWidget(itemN, widget)
+            i += 1
 
 
 class MainWidget(QWidget):

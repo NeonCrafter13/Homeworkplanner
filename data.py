@@ -45,13 +45,13 @@ def add_data(task: Task):
 	with open (filename, 'w') as f:
 		json.dump(temp, f, indent=4)
 
-def delete_data():
+def delete_data(index: int):
 	view_data()
 	new_data = []
 	with open (filename, "r") as f:
 		temp = json.load(f)
 		data_length = len(temp)-1
-	delete_option = input(f"Select a Number 0-{data_length}")
+	delete_option = index
 	i = 0
 	for entry in temp:
 		if i == int(delete_option):
@@ -63,13 +63,17 @@ def delete_data():
 	with open (filename, 'w') as f:
 		json.dump(new_data, f, indent=4)
 
-def edit_data():
-	view_data()
+def edit_data(index: int, task: Task):
+	subject = task.subject
+	homework = task.homework
+	due_date = task.due_date
+	important = task.important
+
 	new_data = []
 	with open (filename, "r") as f:
 		temp = json.load(f)
 		data_length = len(temp)-1
-	edit_option = input(f"Select a Number 0-{data_length}")
+	edit_option = index
 	i = 0
 	for entry in temp:
 		if i == int(edit_option):
@@ -82,9 +86,8 @@ def edit_data():
 			new_data.append(entry)
 			i=i+1
 	with open (filename, 'w') as f:
-		json.dump(temp, f, indent=4)
+		json.dump(new_data, f, indent=4)
 		
-delete_data()
 """
 while True:
 	Choices()
