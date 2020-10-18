@@ -65,7 +65,7 @@ def delete_data(index: int):
 
 def edit_data(index: int, task: Task):
 	subject = task.subject
-	homework = task.homework
+	homework = task.what
 	due_date = task.due_date
 	important = task.important
 
@@ -75,13 +75,14 @@ def edit_data(index: int, task: Task):
 		data_length = len(temp)-1
 	edit_option = index
 	i = 0
+	item_data = {}
 	for entry in temp:
 		if i == int(edit_option):
 			item_data["subject"] = subject
 			item_data["homework"] = homework
 			item_data["due_date"] = [*due_date.getDate()]
 			item_data["important"] = important
-			new_data.append({"subject": subject, "homework": homework, "due_date": due_date, "important": important})
+			new_data.append(item_data)
 		else:
 			new_data.append(entry)
 			i=i+1

@@ -35,6 +35,53 @@ class RefreshTasksEvent(QObject):
 global refreshtasksevent
 refreshtasksevent = RefreshTasksEvent()
 
+class EditWindow(QWidget):
+    def __init__(self, task: Task, index: int):
+        super().__init__()
+        self.task = task
+        self.index = index #Index of the task
+        self.initMe()
+
+    def initMe(self):
+        self.h = QHBoxLayout(self)
+
+        self.subject = QLineEdit(self.task.subject)
+        self.h.addWidget(self.subject)
+
+        self.what = QLineEdit(self.task.what)
+        self.h.addWidget(self.what)
+
+        self.due_date = QDateEdit(calendarPopup=True)
+        self.h.addWidget(self.due_date)
+        self.due_date.setDate(self.task.due_date)
+
+        self.info = QLabel("Mark as important:")
+        self.h.addWidget(self.info)
+
+        self.important = QCheckBox()
+        self.important.setChecked(self.task.important)
+        self.h.addWidget(self.important)
+
+        self.submitbutton = QPushButton("Submit")
+        self.submitbutton.clicked.connect(self.submit)
+        self.h.addWidget(self.submitbutton)
+
+        self.setLayout(self.h)
+
+    def submit(self):
+        # Creates new Task
+        subject = self.subject.text()
+        what = self.what.text()
+        due_date = self.due_date.date()
+        important = self.important.isChecked()
+        newtask = Task(subject, what, due_date, important)
+
+        #Change Json
+        data.edit_data(self.index, newtask)
+
+        self.setParent(None)
+        refreshtasksevent.refresh.emit()
+
 class TaskView(QWidget):
     def __init__(self, task: Task, index: int):
         super().__init__()
@@ -42,7 +89,6 @@ class TaskView(QWidget):
         self.index = index
         self.initMe()
         
-    
     def initMe(self):
         self.h = QHBoxLayout(self)
         
@@ -52,8 +98,9 @@ class TaskView(QWidget):
 
         self.h.addWidget(QLabel(self.task.due_date.toString()))
 
-        self.edit = QPushButton(icon=editIcon)
-        self.h.addWidget(self.edit)
+        self.editBtn = QPushButton(icon=editIcon)
+        self.editBtn.clicked.connect(self.edit)
+        self.h.addWidget(self.editBtn)
 
         self.deleteBtn = QPushButton(icon=deleteIcon)
         self.deleteBtn.clicked.connect(self.delete)
@@ -61,8 +108,11 @@ class TaskView(QWidget):
 
         self.setLayout(self.h)
 
+    def edit(self):
+        self.editwindow = EditWindow(self.task, self.index)
+        self.editwindow.show()
+
     def delete(self):
-        print(self.index)
         data.delete_data(self.index)
         refreshtasksevent.refresh.emit()
 
@@ -94,7 +144,6 @@ class NewTaskWidget(QWidget):
         self.submitbutton.clicked.connect(self.submit)
         self.h.addWidget(self.submitbutton)
 
-
         self.setLayout(self.h)
 
     def submit(self):
@@ -110,7 +159,6 @@ class NewTaskWidget(QWidget):
 
         global refreshtasksevent
         refreshtasksevent.refresh.emit()
-
 
 class TasksWidget(QWidget):
     def __init__(self):
@@ -159,7 +207,6 @@ class TasksWidget(QWidget):
             self.scrollcontent.setItemWidget(itemN, widget)
             i += 1
 
-
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -184,7 +231,6 @@ class MainWindow(QMainWindow):
         self.main = MainWidget()
         self.setCentralWidget(self.main)
         self.show()
-
 
 # opens the Window
 w = MainWindow()
