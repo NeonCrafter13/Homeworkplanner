@@ -32,7 +32,6 @@ deleteIcon = QIcon("data/delete.png")
 class RefreshTasksEvent(QObject):
     refresh = pyqtSignal()
 
-global refreshtasksevent
 refreshtasksevent = RefreshTasksEvent()
 
 class EditWindow(QWidget):
@@ -90,6 +89,10 @@ class TaskView(QWidget):
         self.initMe()
         
     def initMe(self):
+
+        if self.task.important:
+            self.setStyleSheet("color: #DC143C;\nfont-weight: bold;")
+
         self.h = QHBoxLayout(self)
         
         self.h.addWidget(QLabel(self.task.subject))
@@ -157,14 +160,12 @@ class NewTaskWidget(QWidget):
         #Add to Json
         data.add_data(newtask)
 
-        global refreshtasksevent
         refreshtasksevent.refresh.emit()
 
 class TasksWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        global refreshtasksevent
         refreshtasksevent.refresh.connect(self.reloadTasks)
 
         self.initMe()
@@ -182,6 +183,7 @@ class TasksWidget(QWidget):
             itemN = QListWidgetItem()
             widget = TaskView(task, i)
             itemN.setSizeHint(widget.sizeHint())
+            itemN.setFlags(Qt.ItemIsSelectable)
 
             self.scrollcontent.addItem(itemN)
             self.scrollcontent.setItemWidget(itemN, widget)
@@ -202,6 +204,7 @@ class TasksWidget(QWidget):
             itemN = QListWidgetItem()
             widget = TaskView(task, i)
             itemN.setSizeHint(widget.sizeHint())
+            itemN.setFlags(Qt.ItemIsSelectable)
 
             self.scrollcontent.addItem(itemN)
             self.scrollcontent.setItemWidget(itemN, widget)
