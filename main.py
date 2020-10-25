@@ -6,13 +6,10 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QApplication,
     QMainWindow,
-    QAction,
-    QGridLayout,
     QScrollArea,
     QLabel,
     QListWidget,
     QListWidgetItem,
-    QAbstractItemView,
     QLineEdit,
     QDateEdit,
     QCheckBox
