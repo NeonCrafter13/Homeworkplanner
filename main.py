@@ -16,16 +16,24 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDateTime, QObject, pyqtSignal
-import notifications
 import concurrent.futures
+import configparser
 
+import notifications
 from task import Task
 import data
 
 app = QApplication(sys.argv)
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    executor.submit(notifications.start)
+config = configparser.ConfigParser()
+config.read("data/settings.ini")
+
+try:
+    if config["OPTIONS"]["notifications"] == "True":
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            executor.submit(notifications.start) #Starts Notifications
+except:
+    pass
 
 editIcon = QIcon("data/edit.png")
 deleteIcon = QIcon("data/delete.png")
