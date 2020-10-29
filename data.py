@@ -89,6 +89,26 @@ def edit_data(index: int, task: Task):
 	with open (filename, 'w') as f:
 		json.dump(new_data, f, indent=4)
 		
+def check_date(): #checks date then if the date is false it gets deleted 
+    view_data()
+    today = str(date.today())
+    today = today.replace("-", "")
+    print(today)  # '2017-12-26'
+    lis = []
+    with open(filename, "r") as f:
+        temp = json.load(f)
+        for entry in temp:
+            name = entry["name"]
+            homework = entry["homework"]
+            due_date = entry["due_date"]
+            print(due_date)
+            if today < due_date:
+                print("Old date")
+                old_data = True
+                lis.append({"name": name, "homework": homework, "due_date": due_date, "old_data": old_data})
+    with open(filename, 'w') as f:
+        json.dump(lis, f, indent=4)
+		
 """
 while True:
 	Choices()
