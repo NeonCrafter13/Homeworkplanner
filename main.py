@@ -246,7 +246,7 @@ class MainWindow(QMainWindow):
 
     def initMe(self):
         self.setWindowTitle("Homeworkplanner") # Change later to better name
-        # self.setWindowIcon(QIcon("someIcon.png"))
+        self.setWindowIcon(QIcon("data/icon.png"))
         self.main = MainWidget()
         self.setCentralWidget(self.main)
         self.show()
