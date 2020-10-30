@@ -35,6 +35,13 @@ try:
 except:
     pass
 
+try:
+    if config["OPTIONS"]["delete_old"] == "True":
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            executor.submit(data.check_date)
+except:
+    pass
+
 editIcon = QIcon("data/edit.png")
 deleteIcon = QIcon("data/delete.png")
 

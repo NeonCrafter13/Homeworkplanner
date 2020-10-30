@@ -5,6 +5,7 @@
 # probably Json, sqlite
 #-------------------------------------------------------------------------------------
 import json
+from datetime import date
 from task import Task
 from PyQt5.QtCore import QDate #Class of the Dates
 
@@ -90,49 +91,20 @@ def edit_data(index: int, task: Task):
 		json.dump(new_data, f, indent=4)
 		
 def check_date(): #checks date then if the date is false it gets deleted 
-    view_data()
-    today = str(date.today())
-    today = today.replace("-", "")
-    print(today)  # '2017-12-26'
+    today = date.today()
     lis = []
     with open(filename, "r") as f:
         temp = json.load(f)
         for entry in temp:
-            name = entry["name"]
+            subject = entry["subject"]
             homework = entry["homework"]
             due_date = entry["due_date"]
-            print(due_date)
-            if today < due_date:
-                print("Old date")
-                old_data = True
-                lis.append({"name": name, "homework": homework, "due_date": due_date, "old_data": old_data})
+            important = entry["important"]
+            if not today > date(*due_date):
+                lis.append(entry)
     with open(filename, 'w') as f:
         json.dump(lis, f, indent=4)
-		
-def turn_true():  # Makes old_task = True or false depending on current time compared to due_date
-    view_data()
-    new_data = []
-    current_time = datetime.datetime.today().strftime("%Y%m%d")
-    current_time = current_time.replace(".", " ")
-    with open(filename, "r") as f:
-        temp = json.load(f)
-    i = 0
-    for entry in temp:
-        due_date = entry["due_date"]
-        if current_time > due_date:
-            name = entry["name"]
-            homework = entry["homework"]
-            due_date = entry["due_date"]
-            old_data = entry["old_data"]
-            old_data = True
-            new_data.append({"name": name, "homework": homework, "due_date": due_date, "old_data": old_data})
-            i = i + 1
-        else:
-            new_data.append(entry)
-            i = i + 1
-    with open(filename, 'w') as f:
-        json.dump(new_data, f, indent=4)
-	
+
 """
 while True:
 	Choices()
