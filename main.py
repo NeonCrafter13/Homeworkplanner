@@ -1,6 +1,13 @@
 #! /usr/bin/env python3
 
 import concurrent.futures
+
+import subprocess
+
+
+subprocess.run(["pip3", "install", "py_notifier"])
+subprocess.run(["pip3", "install", "zmtools>=1.3.0"])
+
 import configparser
 import sys
 
@@ -12,6 +19,7 @@ from PyQt5.QtWidgets import (QApplication, QCheckBox, QDateEdit, QHBoxLayout,
                              QVBoxLayout, QWidget)
 
 from zmtools import get_module
+
 
 # Import all custom modules, attempting from PATH first and then /usr/share/homeworkplanner/
 for m in ("data", "notifications", "task"):
@@ -41,6 +49,8 @@ deleteIcon = QIcon("data/delete.png")
 
 class RefreshTasksEvent(QObject):
     refresh = pyqtSignal()
+
+Task = task.Task
 
 refreshtasksevent = RefreshTasksEvent()
 
@@ -97,14 +107,14 @@ class TaskView(QWidget):
         self.task = task
         self.index = index
         self.initMe()
-        
+
     def initMe(self):
 
         if self.task.important:
             self.setStyleSheet("color: #DC143C;\nfont-weight: bold;")
 
         self.h = QHBoxLayout(self)
-        
+
         self.h.addWidget(QLabel(self.task.subject))
 
         self.h.addWidget(QLabel(self.task.what))
@@ -160,7 +170,7 @@ class NewTaskWidget(QWidget):
         self.setLayout(self.h)
 
     def submit(self):
-        # Creates new Task 
+        # Creates new Task
         subject = self.subject.text()
         what = self.what.text()
         due_date = self.due_date.date()
@@ -249,4 +259,3 @@ class MainWindow(QMainWindow):
 w = MainWindow()
 # Closes App when Window is closed
 sys.exit(app.exec_())
-
