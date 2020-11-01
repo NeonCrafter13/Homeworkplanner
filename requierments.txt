@@ -1,0 +1,2 @@
+PyQt5
+py-notifier==0.1.1
