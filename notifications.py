@@ -1,7 +1,12 @@
-from pynotifier import Notification
-import data
-from PyQt5.QtCore import QDate
 import os
+
+from pynotifier import Notification
+from PyQt5.QtCore import QDate
+from zmtools import get_module
+
+# Import all custom modules, attempting from PATH first and then /usr/share/homeworkplanner/
+for m in ("data",):
+	globals()[m] = get_module(m, "/usr/share/homeworkplanner/{}.py".format(m))
 
 current_date = QDate.currentDate()
 def start():

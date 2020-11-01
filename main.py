@@ -1,27 +1,21 @@
-import sys
-from PyQt5.QtWidgets import (
-    QWidget,
-    QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
-    QApplication,
-    QMainWindow,
-    QScrollArea,
-    QLabel,
-    QListWidget,
-    QListWidgetItem,
-    QLineEdit,
-    QDateEdit,
-    QCheckBox
-)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QDateTime, QObject, pyqtSignal
+#! /usr/bin/env python3
+
 import concurrent.futures
 import configparser
+import sys
 
-import notifications
-from task import Task
-import data
+from PyQt5.QtCore import QDateTime, QObject, Qt, pyqtSignal
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QDateEdit, QHBoxLayout,
+                             QLabel, QLineEdit, QListWidget, QListWidgetItem,
+                             QMainWindow, QPushButton, QScrollArea,
+                             QVBoxLayout, QWidget)
+
+from zmtools import get_module
+
+# Import all custom modules, attempting from PATH first and then /usr/share/homeworkplanner/
+for m in ("data", "notifications", "task"):
+    globals()[m] = get_module(m, "/usr/share/homeworkplanner/{}.py".format(m))
 
 app = QApplication(sys.argv)
 
