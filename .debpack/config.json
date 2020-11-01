@@ -1,0 +1,17 @@
+{
+	"section" : "utils",
+	"priority" : "optional",
+	"depends": [
+		"python3"
+	],
+	"description" : "a homework planner written in Python",
+	"build" : {
+		"files" : {
+			"main.py" : "/usr/bin/homeworkplanner",
+			"data.py" : "/usr/share/homeworkplanner/",
+			"notifications.py" : "/usr/share/homeworkplanner/",
+			"task.py" : "/usr/share/homeworkplanner/"
+		}
+	},
+	"architecture_all" : true
+}
