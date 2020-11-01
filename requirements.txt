@@ -1,2 +1,3 @@
 PyQt5
 py-notifier==0.1.1
+zmtools>=1.3.0

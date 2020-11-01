@@ -1,27 +1,29 @@
-import sys
-from PyQt5.QtWidgets import (
-    QWidget,
-    QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
-    QApplication,
-    QMainWindow,
-    QScrollArea,
-    QLabel,
-    QListWidget,
-    QListWidgetItem,
-    QLineEdit,
-    QDateEdit,
-    QCheckBox
-)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QDateTime, QObject, pyqtSignal
-import concurrent.futures
-import configparser
+#! /usr/bin/env python3
 
-import notifications
-from task import Task
-import data
+import concurrent.futures
+
+import subprocess
+
+
+subprocess.run(["pip3", "install", "py_notifier"])
+subprocess.run(["pip3", "install", "zmtools>=1.3.0"])
+
+import configparser
+import sys
+
+from PyQt5.QtCore import QDateTime, QObject, Qt, pyqtSignal
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QDateEdit, QHBoxLayout,
+                             QLabel, QLineEdit, QListWidget, QListWidgetItem,
+                             QMainWindow, QPushButton, QScrollArea,
+                             QVBoxLayout, QWidget)
+
+from zmtools import get_module
+
+
+# Import all custom modules, attempting from PATH first and then /usr/share/homeworkplanner/
+for m in ("data", "notifications", "task"):
+    globals()[m] = get_module(m, "/usr/share/homeworkplanner/{}.py".format(m))
 
 app = QApplication(sys.argv)
 
@@ -47,6 +49,8 @@ deleteIcon = QIcon("data/delete.png")
 
 class RefreshTasksEvent(QObject):
     refresh = pyqtSignal()
+
+Task = task.Task
 
 refreshtasksevent = RefreshTasksEvent()
 
@@ -103,14 +107,14 @@ class TaskView(QWidget):
         self.task = task
         self.index = index
         self.initMe()
-        
+
     def initMe(self):
 
         if self.task.important:
             self.setStyleSheet("color: #DC143C;\nfont-weight: bold;")
 
         self.h = QHBoxLayout(self)
-        
+
         self.h.addWidget(QLabel(self.task.subject))
 
         self.h.addWidget(QLabel(self.task.what))
@@ -166,7 +170,7 @@ class NewTaskWidget(QWidget):
         self.setLayout(self.h)
 
     def submit(self):
-        # Creates new Task 
+        # Creates new Task
         subject = self.subject.text()
         what = self.what.text()
         due_date = self.due_date.date()
@@ -255,4 +259,3 @@ class MainWindow(QMainWindow):
 w = MainWindow()
 # Closes App when Window is closed
 sys.exit(app.exec_())
-

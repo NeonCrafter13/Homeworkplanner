@@ -6,8 +6,13 @@
 #-------------------------------------------------------------------------------------
 import json
 from datetime import date
-from task import Task
+from zmtools import get_module
+
 from PyQt5.QtCore import QDate #Class of the Dates
+
+# Import all custom modules, attempting from PATH first and then /usr/share/homeworkplanner/
+for m in ("task",):
+	globals()[m] = get_module(m, "/usr/share/homeworkplanner/{}.py".format(m))
 
 filename = "./data/jsondata.json"
 def Choices():
@@ -26,11 +31,11 @@ def view_data():
 			due_date = entry["due_date"] #List of 3 int for year, month, day
 			due_date = QDate(*due_date)
 			important = entry["important"]
-			tasks.append(Task(subject, homework, due_date, important=important))
+			tasks.append(task.Task(subject, homework, due_date, important=important))
 		return tasks
 			
 
-def add_data(task: Task):
+def add_data(task: task.Task):
 	subject = task.subject
 	homework = task.what
 	due_date = task.due_date
@@ -64,7 +69,7 @@ def delete_data(index: int):
 	with open (filename, 'w') as f:
 		json.dump(new_data, f, indent=4)
 
-def edit_data(index: int, task: Task):
+def edit_data(index: int, task: task.Task):
 	subject = task.subject
 	homework = task.what
 	due_date = task.due_date
