@@ -9,6 +9,16 @@ A Homeworkplanner written in Python, part of Tech With Tim CodeJam.
 * Extract the Zip.
 * Running the Homeworkplanner.exe file will start the program.
 
+### Installation on Debian based systems:
+Download the last .deb file here: https://github.com/NeonCrafter13/Homeworkplanner/releases/tag/1.1
+Double-click the file you downloaded.
+Click install
+Open a terminal and type 'homeworkplanner' wait till it installs some pip packages.
+
+*If you get an error and the programm stops just run 'homeworkplanner' again.*
+
+*The settings.ini file can be found in '/usr/share/homeworkplanner/settings.ini'*
+
 ### Installation on other platforms:
 * Install Python.
 * Download the last source code here: https://github.com/NeonCrafter13/Homeworkplanner/releases/tag/1.1
