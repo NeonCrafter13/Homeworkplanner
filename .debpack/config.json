@@ -12,7 +12,12 @@
 			"main.py" : "/usr/bin/homeworkplanner",
 			"data.py" : "/usr/share/homeworkplanner/",
 			"notifications.py" : "/usr/share/homeworkplanner/",
-			"task.py" : "/usr/share/homeworkplanner/"
+			"task.py" : "/usr/share/homeworkplanner/",
+			"data/delete.png": "/usr/share/homeworkplanner/",
+			"data/edit.png": "/usr/share/homeworkplanner/",
+			"data/icon.png": "/usr/share/homeworkplanner/",
+			"data/jsondata.json": "/usr/share/homeworkplanner/",
+			"data/settings.ini": "/usr/share/homeworkplanner/"
 		}
 	},
 	"architecture_all" : true

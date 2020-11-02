@@ -28,7 +28,7 @@ for m in ("data", "notifications", "task"):
 app = QApplication(sys.argv)
 
 config = configparser.ConfigParser()
-config.read("data/settings.ini")
+config.read("/usr/share/homeworkplanner/settings.ini")
 
 try:
     if config["OPTIONS"]["notifications"] == "True":
@@ -44,8 +44,8 @@ try:
 except:
     pass
 
-editIcon = QIcon("data/edit.png")
-deleteIcon = QIcon("data/delete.png")
+editIcon = QIcon("/usr/share/homeworkplanner/edit.png")
+deleteIcon = QIcon("/usr/share/homeworkplanner/delete.png")
 
 class RefreshTasksEvent(QObject):
     refresh = pyqtSignal()

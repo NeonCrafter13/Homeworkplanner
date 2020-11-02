@@ -14,7 +14,7 @@ from PyQt5.QtCore import QDate #Class of the Dates
 for m in ("task",):
 	globals()[m] = get_module(m, "/usr/share/homeworkplanner/{}.py".format(m))
 
-filename = "./data/jsondata.json"
+filename = "/usr/share/homeworkplanner/jsondata.json"
 def Choices():
 	print("Data Management")
 	print("(1) View Data")
