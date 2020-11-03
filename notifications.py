@@ -17,7 +17,7 @@ def start():
                 title=task.subject,
                 description=f"what: {task.what},\ndue_date: {task.due_date.toString()}",
                 # On Windows .ico is required, on Linux - .png
-                icon_path='path/to/image/file/icon.png',
+                icon_path='/usr/share/homeworkplanner/icon.png',
                 duration=5,                              # Duration in seconds
                 urgency=Notification.URGENCY_CRITICAL
             ).send()
@@ -26,7 +26,7 @@ def start():
                 title=task.subject,
                 description=task.what,
                 # On Windows .ico is required, on Linux - .png
-                icon_path='path/to/image/file/icon.png',
+                icon_path='/usr/share/homeworkplanner/icon.png',
                 duration=5,                              # Duration in seconds
                 urgency=Notification.URGENCY_LOW
             ).send()
